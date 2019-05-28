@@ -50,11 +50,17 @@ diskutil list $diskId
 camPartName=T_CAM
 
 if [ "$partitioningScheme" == "MBR" ] || [ "$partitioningScheme" == "GPT" ]; then
-    diskutil partitionDisk ${diskId} $partitioningScheme FAT32 $camPartName $camPartSize FAT32 T_MUSIC R
+    if [ "$camPartSize" == "100%" ]; then 
+        diskutil partitionDisk ${diskId} $partitioningScheme FAT32 $camPartName $camPartSize
+        sleep 1; mkdir -p /Volumes/$camPartName/TeslaCam
+    elif [ "$camPartSize" == "0%" ]; then 
+        diskutil partitionDisk ${diskId} $partitioningScheme FAT32 T_MUSIC 100%
+    else
+        diskutil partitionDisk ${diskId} $partitioningScheme FAT32 $camPartName $camPartSize FAT32 T_MUSIC R
+        sleep 1; mkdir -p /Volumes/$camPartName/TeslaCam
+    fi
 else 
     echo "$partitioningScheme is not supported. Exit"; exit
 fi
 
 # diskutil list $diskId
-sleep 1
-mkdir -p /Volumes/$camPartName/TeslaCam
