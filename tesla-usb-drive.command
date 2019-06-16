@@ -44,6 +44,10 @@ echo "- Camera partition size: $camPartSize"
 
 if [ -n "$3" ]; then partitioningScheme=$3; else partitioningScheme=MBR; fi
 echo "- Partitioning Scheme: $partitioningScheme"
+if [ "$partitioningScheme" == "GPT" ]; then
+    echo "macOS diskutil will automatically add EFI partition with 200MB for GPT partitioning scheme for >= 4GB drive"
+fi
+
 
 ### main
 diskutil list $diskId
@@ -52,15 +56,25 @@ camPartName=T_CAM
 if [ "$partitioningScheme" == "MBR" ] || [ "$partitioningScheme" == "GPT" ]; then
     if [ "$camPartSize" == "100%" ]; then 
         diskutil partitionDisk ${diskId} $partitioningScheme FAT32 $camPartName $camPartSize
-        sleep 1; mkdir -p /Volumes/$camPartName/TeslaCam
+        sleep 1
+        mkdir -p /Volumes/$camPartName/TeslaCam
+        ls /Volumes/$camPartName/TeslaCam
     elif [ "$camPartSize" == "0%" ]; then 
         diskutil partitionDisk ${diskId} $partitioningScheme FAT32 T_MUSIC 100%
     else
         diskutil partitionDisk ${diskId} $partitioningScheme FAT32 $camPartName $camPartSize FAT32 T_MUSIC R
-        sleep 1; mkdir -p /Volumes/$camPartName/TeslaCam
+        sleep 1
+        mkdir -p /Volumes/$camPartName/TeslaCam
+        ls /Volumes/$camPartName/TeslaCam        
     fi
 else 
     echo "$partitioningScheme is not supported. Exit"; exit
 fi
 
 # diskutil list $diskId
+
+read -p "Do you want to unmount ${diskId} now? " answer
+if [ "$answer" == "y" ]; then
+    diskutil unmount /dev/${diskId}s1
+    diskutil unmount /dev/${diskId}s2
+fi
