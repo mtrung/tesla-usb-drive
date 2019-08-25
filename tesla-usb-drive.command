@@ -59,7 +59,7 @@ if [ "$partitioningScheme" == "MBR" ] || [ "$partitioningScheme" == "GPT" ]; the
         sleep 1
         mkdir -p /Volumes/$camPartName/TeslaCam
         ls /Volumes/$camPartName/TeslaCam
-    elif [ "$camPartSize" == "0%" ]; then 
+    elif [ "$camPartSize" == "0%" ] || [ "$camPartSize" == "0" ]; then 
         diskutil partitionDisk ${diskId} $partitioningScheme FAT32 T_MUSIC 100%
     else
         diskutil partitionDisk ${diskId} $partitioningScheme FAT32 $camPartName $camPartSize FAT32 T_MUSIC R

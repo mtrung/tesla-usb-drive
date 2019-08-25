@@ -18,7 +18,7 @@ Syntax: `tesla-usb-drive.command USB_DISK_IDENTIFIER Cam_Partition_Size Partitio
 - USB_DISK_IDENTIFIER: disk1
 - Cam_Partition_Size: percentage (ex: 50%) or storage size value (ex: 16g)
    - To create cam partition only, use '100%'.
-   - To create music partition only, use '0%'.
+   - To create music partition only, use '0%' or '0'.
    - To create both, use 1%-99% or an in-betweeen storage size value
 - Partitioning_Scheme: MBR or GPT. Optional. Default is MBR.
 
