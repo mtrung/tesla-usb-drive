@@ -1,10 +1,12 @@
-# Tesla Cam+Music USB drive maker tool
-For macOS only
+# Tesla DashCam & Music USB drive maker tool
+- Format USB drive into 2 partitions for DashCam and Music
+- For macOS only
 
 ## Features
-- Support partitioning scheme MBR or GPT
 - Support 3 modes: cam only, music only, and both cam & music
+- Create TeslaCam folder if applicable
 - Fool-proof: validate all user inputs. Verify if the specified drive as USB drive.
+- Support partitioning scheme MBR or GPT
 
 ## How to use
 ### Method 1 - Recommended
