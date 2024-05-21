@@ -42,10 +42,12 @@ echo "- Camera partition size: $camPartSize"
 
 ### param 3 validation
 
-if [ -n "$3" ]; then partitioningScheme=$3; else partitioningScheme=GPT; fi
+partitioningScheme=${3:-MBR}
 echo "- Partitioning Scheme: $partitioningScheme"
 if [ "$partitioningScheme" == "GPT" ]; then
     echo "macOS diskutil will automatically add EFI partition with 200MB for GPT partitioning scheme for >= 4GB drive"
+    partitionType=exfat
+else partitionType=FAT32
 fi
 
 
@@ -55,14 +57,14 @@ camPartName=T_CAM
 
 if [ "$partitioningScheme" == "MBR" ] || [ "$partitioningScheme" == "GPT" ]; then
     if [ "$camPartSize" == "100%" ]; then 
-        diskutil partitionDisk ${diskId} $partitioningScheme exfat $camPartName $camPartSize
+        diskutil partitionDisk ${diskId} $partitioningScheme $partitionType $camPartName $camPartSize
         sleep 1
         mkdir -p /Volumes/$camPartName/TeslaCam
         ls /Volumes/$camPartName/TeslaCam
     elif [ "$camPartSize" == "0%" ] || [ "$camPartSize" == "0" ]; then 
-        diskutil partitionDisk ${diskId} $partitioningScheme exfat T_MUSIC 100%
+        diskutil partitionDisk ${diskId} $partitioningScheme $partitionType T_MUSIC 100%
     else
-        diskutil partitionDisk ${diskId} $partitioningScheme exfat $camPartName $camPartSize exfat T_MUSIC R
+        diskutil partitionDisk ${diskId} $partitioningScheme $partitionType $camPartName $camPartSize $partitionType T_MUSIC R
         sleep 1
         mkdir -p /Volumes/$camPartName/TeslaCam
         ls /Volumes/$camPartName/TeslaCam        
